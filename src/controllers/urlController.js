@@ -4,6 +4,7 @@ import {db} from "../database/database.js";
 //post urls/shorten - rota autenticada
 
 export async function encurtarLink(req,res){
+const { url } = req.body;
 
 }
 
