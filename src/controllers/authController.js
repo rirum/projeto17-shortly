@@ -27,29 +27,27 @@ try{
 
 export async function logarUsuario(req,res){
  const { email, password } = req.body;
-//  const { userId, token} = res.locals.session;
+ const novoToken = uuid();
+
 
     try {
         
         const logged = await db.query('SELECT * FROM users WHERE email = $1', [email]);
         if (logged.rowCount === 0 ) return res.status(401).send("Usuário ou senha incorretos")
-        logged = logged.rows[0]
-        const userId = logged.id
+       
 
-        const compararSenha = bcrypt.compareSync(password, logged.password)
-        console.log(logged.password)
+        const compararSenha = bcrypt.compareSync(password, logged.rows[0].password)
+        console.log(logged.rows[0].password)
         if (!compararSenha) return res.status(401).send("Usuário ou senha incorretos")
 
-        const token = uuid();
-
-        // if(logged.rowCount !== 0) {
-        //     await db.query('UPDATE sessions SET token =$1 WHERE "userId"=$2', [token, userId])
-        //     return res.send({tkn});
-        // }
+        const tokenOk = await db.query('SELECT * FROM sessions WHERE "userId" = $1', [logged.rows[0].id])
+        if (tokenOk.rowCount > 0) {
+            await db.query('UPDATE sessions SET token = $1 WHERE "userId" = $2', [novoToken, logged.rows[0].id])
+        } else {
+            await db.query('INSERT INTO sessions ("userId", token) VALUES ($1, $2)', [logged.rows[0].id, novoToken])
+        } res.status(200).send({novoToken})
         
-        await db.query(`INSERT INTO sessions ("userId", token) VALUES ($1, $2);`, [userId, token]);
-        const tokenUser = {token}
-        res.status(200).send(tokenUser);
+
     }catch(error){
         res.status(500).send(error.message)
     }
