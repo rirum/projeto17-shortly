@@ -8,3 +8,5 @@ urlRoutes.get("/urls/:id", pegarLink);
 //verificar link depois
 urlRoutes.get("/urls/open/:shortUrl", redirecionaLink);
 urlRoutes.delete("/urls/:id", deletaLink)
+
+export default urlRoutes

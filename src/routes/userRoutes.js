@@ -6,3 +6,5 @@ const userRoutes = Router();
 
 userRoutes.get("/users/me", perfil);
 userRoutes.get("/ranking", ranking);
+
+export default userRoutes;
