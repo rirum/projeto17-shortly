@@ -27,7 +27,7 @@ try{
 
 export async function logarUsuario(req,res){
  const { email, password } = req.body;
- const novoToken = uuid();
+ const token = uuid();
 
 
     try {
@@ -42,10 +42,10 @@ export async function logarUsuario(req,res){
 
         const tokenOk = await db.query('SELECT * FROM sessions WHERE "userId" = $1', [logged.rows[0].id])
         if (tokenOk.rowCount > 0) {
-            await db.query('UPDATE sessions SET token = $1 WHERE "userId" = $2', [novoToken, logged.rows[0].id])
+            await db.query('UPDATE sessions SET token = $1 WHERE "userId" = $2', [token, logged.rows[0].id])
         } else {
-            await db.query('INSERT INTO sessions ("userId", token) VALUES ($1, $2)', [logged.rows[0].id, novoToken])
-        } res.status(200).send({novoToken})
+            await db.query('INSERT INTO sessions ("userId", token) VALUES ($1, $2)', [logged.rows[0].id, token])
+        } res.status(200).send({token})
         
 
     }catch(error){
