@@ -37,7 +37,7 @@ export async function logarUsuario(req,res){
        
 
         const compararSenha = bcrypt.compareSync(password, logged.rows[0].password)
-        console.log(logged.rows[0].password)
+        
         if (!compararSenha) return res.status(401).send("Usuário ou senha incorretos")
 
         const tokenOk = await db.query('SELECT * FROM sessions WHERE "userId" = $1', [logged.rows[0].id])

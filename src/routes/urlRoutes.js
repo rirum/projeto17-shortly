@@ -10,6 +10,6 @@ urlRoutes.post("/urls/shorten",validateSchema(urlSchema), authValidation, encurt
 urlRoutes.get("/urls/:id", pegarLink);
 //verificar link depois
 urlRoutes.get("/urls/open/:shortUrl", redirecionaLink);
-urlRoutes.delete("/urls/:id", deletaLink)
+urlRoutes.delete("/urls/:id",authValidation, deletaLink)
 
 export default urlRoutes

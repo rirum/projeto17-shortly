@@ -10,14 +10,11 @@ const linkEncurtado = nanoid(8);
 
 try{
     
-    // const id = await db.query('SELECT * FROM sessions WHERE token = $1', [session])
-    // const userId = id.rows[0].userId
-   
     await db.query ('INSERT INTO urls (url, "shortUrl", "userId") VALUES ($1, $2, $3)', [url, linkEncurtado, session.userId])
-    console.log("passou")
+    
     let urlId = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1', [linkEncurtado])
     urlId = urlId.rows[0].id
-    console.log("passou2")
+    
     return res.status(201).send({
         id: urlId,
         shortUrl: linkEncurtado
@@ -43,5 +40,20 @@ export async function redirecionaLink(req,res){
 //delete urls/:id - rota autenticada
 
 export async function deletaLink(req,res){
+    const {id} = req.params
+    const session = res.locals.session
+
+    try{
+        
+        const linkExiste = await db.query('SELECT * FROM urls WHERE id = $1', [id])
+        if (linkExiste.rowCount === 0) return res.status(404).send("Esse link não existe")
+        if (session.userId !== linkExiste.rows[0].userId) return res.sendStatus(401)
+
+        await db.query('DELETE FROM urls WHERE id = $1', [id]);
+        return res.sendStatus(204)
+    }catch(error) {
+        res.status(500).send(error.message)
+    }
+
     
 }
