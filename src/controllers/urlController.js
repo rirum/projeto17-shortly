@@ -39,7 +39,7 @@ export async function pegarLink(req, res){
             shortUrl: link.rows[0].shortUrl,
             url: link.rows[0].url
         }
-        res.send(object);
+        res.status(200).send(object);
         console.log(object)
 
     } catch(error) {
