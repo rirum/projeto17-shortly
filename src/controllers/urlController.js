@@ -28,6 +28,23 @@ try{
 //get urls/id - rota NAO autenticada
 
 export async function pegarLink(req, res){
+    const { id } = req.params
+    
+    try{
+        const link = await db.query('SELECT * FROM urls WHERE id = $1', [id])
+        if (link.rowCount === 0) return res.send(404).status("Esse link não existe")
+
+        const object = {
+            id: id,
+            shortUrl: link.rows[0].shortUrl,
+            url: link.rows[0].url
+        }
+        res.send(object);
+        console.log(object)
+
+    } catch(error) {
+
+    }
 
 }
 

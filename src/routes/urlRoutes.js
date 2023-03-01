@@ -7,7 +7,7 @@ import {urlSchema} from "../schemas/urlSchema.js"
 
 const urlRoutes = Router();
 urlRoutes.post("/urls/shorten",validateSchema(urlSchema), authValidation, encurtarLink);
-urlRoutes.get("/urls/:id", pegarLink);
+urlRoutes.get("/urls/:id", authValidation, pegarLink);
 //verificar link depois
 urlRoutes.get("/urls/open/:shortUrl", redirecionaLink);
 urlRoutes.delete("/urls/:id",authValidation, deletaLink)
