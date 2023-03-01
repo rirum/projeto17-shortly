@@ -12,7 +12,7 @@ try {
             json_agg(
                 json_build_object(
                     'id', urls.id, 'shortUrl', urls."shortUrl", 'url', urls.url, 'visitCount', urls."visitCount")
-                    ) AS "shortenedUrl"
+                    ) AS "shortenedUrls"
                 FROM users
                 JOIN urls ON users.id = urls."userId"
                 WHERE users.id = $1
