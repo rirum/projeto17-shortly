@@ -31,5 +31,16 @@ try {
 //ranking - rota NAO autenticada
 
 export async function ranking(req,res){
-
+ try{
+    const ranking = await db.query(
+        `SELECT users.id AS id, users.name AS name, 
+        COUNT(urls."userId") AS "linksCount", 
+        SUM(urls."visitCount") as "visitCount" FROM users JOIN urls on urls."userId" = users.id
+        GROUP BY users.id
+        ORDER BY "visitCount" 
+        DESC LIMIT 10;`)
+        res.status(200).send(ranking.rows)
+ }catch(error){
+    res.status(500).send(error.message)
+ }
 }
