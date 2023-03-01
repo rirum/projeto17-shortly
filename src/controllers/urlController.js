@@ -43,7 +43,7 @@ export async function pegarLink(req, res){
         console.log(object)
 
     } catch(error) {
-
+    res.status(500).send(error.message)
     }
 
 }
@@ -51,7 +51,17 @@ export async function pegarLink(req, res){
 //get urls/open/:shortUrl - rota nao autenticada
 
 export async function redirecionaLink(req,res){
+    const {shortUrl}  = req.params
 
+    try {
+        const url = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1', [shortUrl])
+        if (url.rowCount === 0) return res.status(404).send("Esse link não existe")
+
+        await db.query('UPDATE urls SET "visitCount" = $1 WHERE id = $2', [url.rows[0].visitCount + 1, url.rows[0].id])
+        res.redirect(url.rows[0].url)
+    } catch(error) {
+        res.send(500).send(error.message)
+    }
 }
 
 //delete urls/:id - rota autenticada
