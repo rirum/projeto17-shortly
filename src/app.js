@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import urlRoutes from "./routes/urlRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 
 const server = express();
@@ -10,7 +11,7 @@ server.use(cors());
 
 //rotas em breve
 
-server.use([authRoutes, urlRoutes]);
+server.use([authRoutes, urlRoutes, userRoutes]);
 const PORT = process.env.PORT || 5000;
 
 
