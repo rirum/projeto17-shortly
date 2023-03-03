@@ -9,7 +9,7 @@ const server = express();
 server.use(express.json());
 server.use(cors());
 
-//rotas em breve
+
 
 server.use([authRoutes, urlRoutes, userRoutes]);
 const PORT = process.env.PORT || 5000;
